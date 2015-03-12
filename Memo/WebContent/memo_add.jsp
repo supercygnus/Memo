@@ -34,10 +34,21 @@ $(function(){
 				for(var i=0;i<7;i++){
 						temp+="<input type='checkbox' name='flag' class='noborder' value='"+(i+1)+"'  />"+weekArray[i];
 					}
-
+				
 				for(var i=1;i<32;i++){
+					var tt=i;
+					if(i<10)
+						tt="0"+i;
+					month_temp+="<input type='checkbox' name='flag' class='noborder' value='"+i+"' size='10' />"+tt+"¤é";
 					
+					var ptr=i;
+					ptr=parseInt(ptr);
+					
+					if(ptr%9==0)
+						month_temp+="<br/>";
 					}
+				
+				alert(month_temp);
 				year_temp+="<select name='flag_m' >";
 				for(var i=1;i<=12;i++){
 					year_temp+="<option value='"+i+"'>"+i+"</option>";
@@ -62,6 +73,7 @@ $(function(){
 							$("#remindFlag").html(temp);
 							break;
 						case 4:
+							$("#remindFlag").html(month_temp);
 							break;
 						case 5:
 							$("#remindFlag").html(year_temp);
@@ -77,7 +89,7 @@ $(function(){
 <body>
 <img src="images/add_top.gif" />
 <form action="MemoServlet?action=add" method="post" >
-<table width="556px" cellpadding="0" cellspacing="0" border="1" align="center">
+<table width="650px" cellpadding="0" cellspacing="0" border="1" align="center">
 <tr height="30px">
 <td width="5%">&nbsp;</td>
 <td width="11%">¼ÐÃD:</td>
@@ -129,13 +141,6 @@ $(function(){
 </tr>
 </table>
 </form>
-<input type='checkbox' name='flag' class='noborder' value=''  />
-<select name='flag_m' >
-<option value=''></option>
-</select>
-<input type='text' name='flag_d' size='2' value='1' />
-
-<input type="text" name='flag' value='' size='10' />
 
 </body>
 </html>
