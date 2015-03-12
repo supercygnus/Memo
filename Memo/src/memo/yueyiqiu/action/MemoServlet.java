@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import memo.yueyiqiu.dao.MemoDAO;
 import memo.yueyiqiu.model.MemoForm;
+import memo.yueyiqiu.tool.StringUtil;
 
 /**
  * Servlet implementation class MemoServlet
@@ -20,7 +21,7 @@ import memo.yueyiqiu.model.MemoForm;
 public class MemoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private MemoDAO mDao=new MemoDAO();
-       
+    StringUtil util=new StringUtil();
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -47,6 +48,9 @@ public class MemoServlet extends HttpServlet {
 		else if(action.equals("del")){
 			this.del(request, response);
 		}
+		else if(action.equals("add")){
+			this.add(request, response);
+		}
 	}
 	
 	protected void listAll(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -71,5 +75,46 @@ public class MemoServlet extends HttpServlet {
 		
 		int id=Integer.parseInt(request.getParameter("id"));
 		
+	}
+	protected void add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		MemoForm form=new MemoForm();
+		String temp="";
+		form.setTitle(util.trimString(util.toBIG5(request.getParameter("title"))));
+		form.setContent(util.trimString(util.toBIG5(request.getParameter("content"))));
+		form.setRemindTime(util.trimString(util.toBIG5(request.getParameter("title"))));
+		int remondMode=Integer.parseInt(request.getParameter("remondMode"));
+		form.setRemindMode(remondMode);
+		boolean over=false;
+		switch(remondMode){
+			case 0:
+			case 2:
+			case 3:
+				String[] flags=request.getParameterValues("flag");
+				for(int i=0;i<flags.length;i++){
+					temp+=flags[i]+",";
+				}
+				form.setFlag(temp);
+				break;
+			case 4:
+				temp="";
+				temp=request.getParameter("flag_m")+"-"+request.getParameter("flag_d");
+				form.setFlag(temp);
+				break;
+		}
+		if(over){
+			request.setAttribute("error", "該訊息日期已經過期,不能建立");
+			request.getRequestDispatcher("error.jsp").forward(request, response);
+		}
+		else{
+			HttpSession session=request.getSession();
+			if(session.getAttribute("userName")==null || session.getAttribute("userName").equals("")){
+				request.setAttribute("error", "你的帳號已經過期,請重新登入");
+				request.getRequestDispatcher("error.jsp").forward(request, response);
+			}
+			else{
+				form.setCreator(util.toBIG5(session.getAttribute("userName").toString()));
+				//int count=
+			}
+		}
 	}
 }

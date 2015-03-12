@@ -20,6 +20,27 @@ public class StringUtil {
 		return returnstring;
 	}
 	
+	public String trimString(String inputstr){
+		
+		String outputstr;
+		if(inputstr==null){
+			return "";
+		}
+		else{
+			
+			
+			try{
+				outputstr=inputstr.trim().replace('\'', (char)32);
+				return outputstr;
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return "";
+			}
+			
+		}
+	} 
+	
 	public String formatNO(int str,int length){
 			String returnStr="";
 			Integer input=new Integer(str);
